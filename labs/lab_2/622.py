@@ -1,44 +1,39 @@
 class MyCircularQueue(object):
 
     def __init__(self, k):
-        self.queue = []
-        self.max_size = k
+        self.queue = [0] * k   
+        self.front = 0          
+        self.rear = 0          
+        self.size = 0         
+        self.capacity = k      
 
     def enQueue(self, value):
-        if len(self.queue) < self.max_size:
-            self.queue.append(value)
-            return True
-        else:
+        if self.isFull():
             return False
+        self.queue[self.rear] = value
+        self.rear = (self.rear + 1) % self.capacity  
+        self.size += 1
+        return True
 
     def deQueue(self):
-        if len(self.queue) > 0:
-            self.queue.pop(0)
-            return True
-        else:
+        if self.isEmpty():
             return False
+        self.front = (self.front + 1) % self.capacity 
+        self.size -= 1
+        return True
 
     def Front(self):
-        if len(self.queue) == 0:
+        if self.isEmpty():
             return -1
-        return self.queue[0]
+        return self.queue[self.front]
 
     def Rear(self):
-        if len(self.queue) == 0:
+        if self.isEmpty():
             return -1
-        return self.queue[-1]
+        return self.queue[(self.rear - 1) % self.capacity]
 
     def isEmpty(self):
-        return len(self.queue) == 0
+        return self.size == 0
 
     def isFull(self):
-        return len(self.queue) == self.max_size
-
-# Your MyCircularQueue object will be instantiated and called as such:
-# obj = MyCircularQueue(k)
-# param_1 = obj.enQueue(value)
-# param_2 = obj.deQueue()
-# param_3 = obj.Front()
-# param_4 = obj.Rear()
-# param_5 = obj.isEmpty()
-# param_6 = obj.isFull()
+        return self.size == self.capacity
